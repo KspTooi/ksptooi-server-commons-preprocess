@@ -5,20 +5,42 @@
 ---
 
 local function spawnEnemies(surface, position, evolutionFactor)
-    local biterTypes = {"small-biter", "medium-biter", "big-biter"}
-    local spitterTypes = {"small-spitter", "medium-spitter", "big-spitter"}
-    local biterCount = math.random(5, 10)
+
+    local biterCount = math.random(2, 10)
     local spitterCount = math.random(1, 5)
+
+    local biterType = "small-biter"
+    local spitterType = "small-spitter"
+
+    if(evolutionFactor > 0.2) then
+        biterType = "small-biter"
+        spitterType = "small-spitter"
+    end
+
+    if(evolutionFactor > 0.5) then
+        biterType = "medium-biter"
+        spitterType = "medium-spitter"
+    end
+
+    if(evolutionFactor > 0.8) then
+        biterType = "big-biter"
+        spitterType = "big-spitter"
+    end
+
+    if(evolutionFactor > 0.9) then
+        biterType = "behemoth-biter"
+        spitterType = "behemoth-biter"
+    end
+
+
     for i=1,biterCount do
-        local biterTypeIndex = math.floor(evolutionFactor * #biterTypes) + 1
-        local biterType = biterTypes[biterTypeIndex]
         surface.create_entity{name = biterType, position = position, force = "enemy"}
     end
+
     for i=1,spitterCount do
-        local spitterTypeIndex = math.floor(evolutionFactor * #spitterTypes) + 1
-        local spitterType = spitterTypes[spitterTypeIndex]
         surface.create_entity{name = spitterType, position = position, force = "enemy"}
     end
+
 end
 
 local function onEntityDied(event)
