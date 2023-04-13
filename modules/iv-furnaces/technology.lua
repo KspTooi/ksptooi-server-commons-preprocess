@@ -8,7 +8,7 @@ data:extend({
 
     {
         type = "technology",
-        name = "kscp-advanced-material-processing-4",
+        name = "kscp-advanced-material-processing",
         icon_size = 256, icon_mipmaps = 4,
         icon = "__base__/graphics/technology/advanced-material-processing-2.png",
         effects =

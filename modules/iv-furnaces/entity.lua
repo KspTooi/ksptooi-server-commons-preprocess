@@ -62,7 +62,7 @@ iv_furnace.animation = {
     }
 }
 
-iv_furnace.    working_visualisations =
+iv_furnace.working_visualisations =
 {
     {
         draw_as_light = true,
