@@ -5,27 +5,148 @@
 ---
 
 local interferingFactors = {
-    "kscp-assembling-machine-4"
+    {
+        type = "assembling-machine",
+        name = "kscp-assembling-machine-4",
+    },
+    {
+        type = "furnace",
+        name = "kscp-furnaces-4"
+    }
 }
+
+
+local function getEntityNearby(entity,type,name,distance)
+    local result = {}
+
+    local beacons = entity.surface.find_entities_filtered({
+        type = type,
+        name = name,
+        area = {
+            { entity.bounding_box.left_top.x - radius, entity.bounding_box.left_top.y - distance},
+            { entity.bounding_box.right_bottom.x + radius, entity.bounding_box.right_bottom.y + distance}
+        },
+        force = entity.force
+    })
+
+    for _, fEntity in pairs(beacons) do
+        if fEntity ~= entity then
+            table.insert(result,fEntity)
+        end
+    end
+
+    return result
+end
+
+local function getBeaconNearby(entity)
+    local result = {}
+
+    local distance = data.raw["beacon"]["beacon"].supply_area_distance * 2 + 6
+
+    --local radius = entity.prototype.supply_area_distance * 2 + 6
+
+    local beacons = entity.surface.find_entities_filtered({
+        type = "beacon",
+        area = {
+            { entity.bounding_box.left_top.x - radius, entity.bounding_box.left_top.y - distance},
+            { entity.bounding_box.right_bottom.x + radius, entity.bounding_box.right_bottom.y + distance}
+        },
+        force = entity.force
+    })
+
+    for _, fbeacon in pairs(beacons) do
+        if fbeacon ~= entity and fbeacon.prototype.distribution_effectivity > 0 then
+            table.insert(result,fbeacon)
+        end
+    end
+
+    return result
+end
 
 
 local function onBuildEntity(event)
 
+    local entity = event.created_entity or event.entity
+
+    if entity == nil and ~entity.valid then
+        return
+    end
+
+    local distance = data.raw["beacon"]["beacon"].supply_area_distance * 2 + 6
+
+    if entity.type == "beacon" then
+
+        for _, f in pairs(interferingFactors) do
+
+            local ret = getEntityNearby(entity,f.type,f.name,distance)
+
+            for _,item in pairs(ret)do
+                item.active = false
+            end
+
+        end
+
+        return
+    end
+
+    for _, f in pairs(interferingFactors) do
+
+        if(entity.type == f.type and entity.name == f.name)then
+
+            local ret = getBeaconNearby(entity)
+
+            if(#ret > 0)then
+                entity.active = false
+            end
+
+        end
+
+    end
 
 end
 
 local function onRemoveEntity(event)
 
+    local entity = event.created_entity or event.entity
+
+    if entity == nil and ~entity.valid then
+        return
+    end
+
+    if entity.type == "beacon" then
+
+        for _, f in pairs(interferingFactors) do
+
+            local ret = getEntityNearby(entity,f.type,f.name,distance)
+
+            --信标周围是否没有指定机器
+            if(#ret < 1)then
+                return
+            end
+
+            --指定机器周围没有其他的信标
+            for _,e in pairs(ret)do
+
+                local otherRet = getBeaconNearby(e)
+
+                if(#otherRet == 1 and otherRet[1] == entity)then
+                    e.active = true
+                end
+
+            end
+
+            return
+        end
+    end
+
 end
 
 
+script.on_event(defines.events.on_built_entity, onBuildEntity)
+script.on_event(defines.events.on_robot_built_entity, onBuildEntity)
+script.on_event(defines.events.script_raised_built, onBuildEntity)
+script.on_event(defines.events.script_raised_revive, onBuildEntity)
 
-
-script.on_event(defines.events.on_built_entity, on_built_entity)
-script.on_event(defines.events.on_robot_built_entity, on_built_entity)
-script.on_event(defines.events.script_raised_built, on_built_entity)
-script.on_event(defines.events.script_raised_revive, on_built_entity)
-
-script.on_event(defines.events.on_entity_died, on_entity_removed)
-script.on_event(defines.events.on_pre_player_mined_item, on_entity_removed)
-script.on_event(defines.events.on_robot_pre_mined, on_entity_removed)
+script.on_event(defines.events.on_entity_died, onRemoveEntity)
+script.on_event(defines.events.on_pre_player_mined_item, onRemoveEntity)
+script.on_event(defines.events.on_robot_pre_mined, onRemoveEntity)
