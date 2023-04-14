@@ -3,9 +3,14 @@ local mod_gui = require("mod-gui")
 unmark = require("modules.unmark-upgrade.UnmarkUpgrader")
 --surfaceManager = require("modules.surface-manager.SurfaceManager")
 
+require("modules.beacon-interference.BeaconInterference")
+require("modules.spawner-feature.SpawnEnhance")
+
+
 
 local ctx = "KspTooi"
 local version = "1.5A"
+
 
 
 --[[commands.add_command("clearup",
@@ -36,21 +41,23 @@ end)
 
 
 
---[[script.on_event(defines.events.on_player_created, function(event)
+script.on_event(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
-    player.print("欢迎来到!"..player.name)
-end)]]
+    player.print("当前服务器版本:"..version..":F.2023413")
+    player.print("更新内容: 1.增加设备'组装机IV型' 2.增加设备'电弧炉' 3.酸液现在不会穿透墙壁 4.虫巢被毁后会刷出部分增援")
+    player.print("欢迎来到KspTooi服务器!"..player.name)
+end)
 
 script.on_event(defines.events.on_player_respawned, function(event)
-    local player = game.players[event.player_index]
+
 end)
 
 
 script.on_event(defines.events.on_player_joined_game, function(event)
 
     local player = game.players[event.player_index]
-    player.print("当前服务器版本:"..version..":F.2023413")
-    player.print("F.2023413更新内容: 1.增加设备'组装机IV型' 2.增加设备'电炉IV型' 2.酸液现在不会穿透墙壁")
+    player.print("当前服务器版本:"..version..":F.2023413.5")
+    player.print("更新内容: 1.增加设备'组装机IV型' 2.增加设备'电弧炉' 3.酸液现在不会穿透墙壁 4.增加墙壁'钢制墙壁' 5.虫巢被毁后会刷出部分增援")
     player.print("欢迎来到KspTooi服务器!"..player.name)
 
     local msg = settings.global["kscp-player-join-message"].value;

@@ -3,6 +3,19 @@ require 'modules.iv-assembling.item'
 require 'modules.iv-assembling.receipe'
 require 'modules.iv-assembling.technology'
 
+require("modules.iv-furnaces.entity")
+require("modules.iv-furnaces.item")
+require("modules.iv-furnaces.receipe")
+require("modules.iv-furnaces.technology")
+
+require("modules.steel-wall.entity")
+require("modules.steel-wall.item")
+require("modules.steel-wall.receipe")
+require("modules.steel-wall.technology")
+
+
 --[[
 require 'modules.se-delivery-cannon.delivery_cannon_capsule_update'
 require 'modules.drone.drone_tower_upgrade']]
+
+

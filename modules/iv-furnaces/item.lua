@@ -9,7 +9,7 @@ data:extend(
             {
                 type = "item",
                 name = "kscp-furnaces-4",
-                icon = "__ksptooi-server-commons-preprocess__/modules/iv-assembling/res/iv-assembling-machine-icon.png",
+                icon = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace.png",
                 icon_size = 64,
                 icon_mipmaps = 1,
                 subgroup = "extraction-machine",

@@ -4,6 +4,9 @@
 --- DateTime: 2023/4/13 11:08
 ---
 
+
+local beacon_distance = 3
+
 local interferingFactors = {
     {
         type = "assembling-machine",
@@ -19,20 +22,19 @@ local interferingFactors = {
 local function getEntityNearby(entity,type,name,distance)
     local result = {}
 
-    local beacons = entity.surface.find_entities_filtered({
+    local entities = entity.surface.find_entities_filtered({
         type = type,
         name = name,
         area = {
-            { entity.bounding_box.left_top.x - radius, entity.bounding_box.left_top.y - distance},
-            { entity.bounding_box.right_bottom.x + radius, entity.bounding_box.right_bottom.y + distance}
+            { entity.bounding_box.left_top.x - distance, entity.bounding_box.left_top.y - distance},
+            { entity.bounding_box.right_bottom.x + distance, entity.bounding_box.right_bottom.y + distance}
         },
         force = entity.force
     })
 
-    for _, fEntity in pairs(beacons) do
-        if fEntity ~= entity then
-            table.insert(result,fEntity)
-        end
+
+    for _, fEntity in pairs(entities) do
+        table.insert(result,fEntity)
     end
 
     return result
@@ -41,15 +43,14 @@ end
 local function getBeaconNearby(entity)
     local result = {}
 
-    local distance = data.raw["beacon"]["beacon"].supply_area_distance * 2 + 6
 
-    --local radius = entity.prototype.supply_area_distance * 2 + 6
+    local distance = 4
 
     local beacons = entity.surface.find_entities_filtered({
         type = "beacon",
         area = {
-            { entity.bounding_box.left_top.x - radius, entity.bounding_box.left_top.y - distance},
-            { entity.bounding_box.right_bottom.x + radius, entity.bounding_box.right_bottom.y + distance}
+            { entity.bounding_box.left_top.x - distance, entity.bounding_box.left_top.y - distance},
+            { entity.bounding_box.right_bottom.x + distance, entity.bounding_box.right_bottom.y + distance}
         },
         force = entity.force
     })
@@ -68,11 +69,11 @@ local function onBuildEntity(event)
 
     local entity = event.created_entity or event.entity
 
-    if entity == nil and ~entity.valid then
+    if entity == nil and not entity.valid then
         return
     end
 
-    local distance = data.raw["beacon"]["beacon"].supply_area_distance * 2 + 6
+    local distance = 4
 
     if entity.type == "beacon" then
 
@@ -82,6 +83,15 @@ local function onBuildEntity(event)
 
             for _,item in pairs(ret)do
                 item.active = false
+
+                item.surface.create_entity{
+                    name = "flying-text",
+                    position = item.position,
+                    text = "设备被干扰",
+                    color = {r = 1, g = 1, b = 1},
+                    time_to_live = 180,
+                    speed = 0.1
+                }
             end
 
         end
@@ -97,6 +107,14 @@ local function onBuildEntity(event)
 
             if(#ret > 0)then
                 entity.active = false
+                entity.surface.create_entity{
+                    name = "flying-text",
+                    position = entity.position,
+                    text = "设备被干扰",
+                    color = {r = 1, g = 1, b = 1},
+                    time_to_live = 180,
+                    speed = 0.1
+                }
             end
 
         end
@@ -109,9 +127,11 @@ local function onRemoveEntity(event)
 
     local entity = event.created_entity or event.entity
 
-    if entity == nil and ~entity.valid then
+    if entity == nil and not entity.valid then
         return
     end
+
+    local distance = 4
 
     if entity.type == "beacon" then
 
@@ -120,22 +140,21 @@ local function onRemoveEntity(event)
             local ret = getEntityNearby(entity,f.type,f.name,distance)
 
             --信标周围是否没有指定机器
-            if(#ret < 1)then
-                return
-            end
+            if(#ret > 0)then
 
-            --指定机器周围没有其他的信标
-            for _,e in pairs(ret)do
+                --指定机器周围没有其他的信标
+                for _,e in pairs(ret)do
 
-                local otherRet = getBeaconNearby(e)
+                    local otherRet = getBeaconNearby(e)
 
-                if(#otherRet == 1 and otherRet[1] == entity)then
-                    e.active = true
+                    if(#otherRet == 1 and otherRet[1] == entity)then
+                        e.active = true
+                    end
+
                 end
 
             end
 
-            return
         end
     end
 

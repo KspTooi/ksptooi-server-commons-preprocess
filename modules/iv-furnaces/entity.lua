@@ -4,9 +4,208 @@
 --- DateTime: 2023/4/13 14:34
 ---
 
-data:extend(  {
+local iv_furnace = table.deepcopy(data.raw["furnace"]["electric-furnace"])
+
+iv_furnace.name = "kscp-furnaces-4"
+iv_furnace.max_health = 625
+iv_furnace.minable = {mining_time = 0.3, result = "kscp-furnaces-4"}
+iv_furnace.crafting_speed = 4.375
+iv_furnace.energy_usage = "1875kW"
+
+iv_furnace.module_specification ={
+    module_slots = 12
+}
+
+iv_furnace.icon = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace.png"
+
+iv_furnace.animation = {
+    layers =
+    {
+        {
+            filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace-base.png",
+            priority = "high",
+            width = 129,
+            height = 100,
+            frame_count = 1,
+            shift = {0.421875, 0},
+            hr_version =
+            {
+                filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/hr-electric-furnace.png",
+                priority = "high",
+                width = 239,
+                height = 219,
+                frame_count = 1,
+                shift = util.by_pixel(0.75, 5.75),
+                scale = 0.5
+            }
+        },
+        {
+            filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace-shadow.png",
+            priority = "high",
+            width = 129,
+            height = 100,
+            frame_count = 1,
+            shift = {0.421875, 0},
+            draw_as_shadow = true,
+            hr_version =
+            {
+                filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/hr-electric-furnace-shadow.png",
+                priority = "high",
+                width = 227,
+                height = 171,
+                frame_count = 1,
+                draw_as_shadow = true,
+                shift = util.by_pixel(11.25, 7.75),
+                scale = 0.5
+            }
+        }
+    }
+}
+
+iv_furnace.working_visualisations =
+{
+    {
+        draw_as_light = true,
+        fadeout = true,
+        animation =
+        {
+            layers =
+            {
+                {
+                    filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace-heater.png",
+                    priority = "high",
+                    width = 25,
+                    height = 15,
+                    frame_count = 12,
+                    animation_speed = 0.5,
+                    shift = {0.015625, 0.890625},
+                    hr_version =
+                    {
+                        filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/hr-electric-furnace-heater.png",
+                        priority = "high",
+                        width = 60,
+                        height = 56,
+                        frame_count = 12,
+                        animation_speed = 0.5,
+                        shift = util.by_pixel(1.75, 32.75),
+                        scale = 0.5
+                    }
+                },
+                {
+                    filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace-light.png",
+                    blend_mode = "additive",
+                    width = 104,
+                    height = 102,
+                    repeat_count = 12,
+                    shift = util.by_pixel(0, 0),
+                    hr_version =
+                    {
+                        filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/hr-electric-furnace-light.png",
+                        blend_mode = "additive",
+                        width = 202,
+                        height = 202,
+                        repeat_count = 12,
+                        shift = util.by_pixel(1, 0),
+                        scale = 0.5,
+                    }
+                },
+            }
+        },
+    },
+    {
+        draw_as_light = true,
+        draw_as_sprite = false,
+        fadeout = true,
+        animation =
+        {
+            filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace-ground-light.png",
+            blend_mode = "additive",
+            width = 82,
+            height = 64,
+            shift = util.by_pixel(4, 68),
+            hr_version =
+            {
+                filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/hr-electric-furnace-ground-light.png",
+                blend_mode = "additive",
+                width = 166,
+                height = 124,
+                shift = util.by_pixel(3, 69),
+                scale = 0.5,
+            }
+        },
+    },
+    {
+        animation =
+        {
+            filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace-propeller-1.png",
+            priority = "high",
+            width = 19,
+            height = 13,
+            frame_count = 4,
+            animation_speed = 0.5,
+            shift = {-0.671875, -0.640625},
+            hr_version =
+            {
+                filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/hr-electric-furnace-propeller-1.png",
+                priority = "high",
+                width = 37,
+                height = 25,
+                frame_count = 4,
+                animation_speed = 0.5,
+                shift = util.by_pixel(-20.5, -18.5),
+                scale = 0.5
+            }
+        }
+    },
+    {
+        animation =
+        {
+            filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace-propeller-2.png",
+            priority = "high",
+            width = 12,
+            height = 9,
+            frame_count = 4,
+            animation_speed = 0.5,
+            shift = {0.0625, -1.234375},
+            hr_version =
+            {
+                filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/hr-electric-furnace-propeller-2.png",
+                priority = "high",
+                width = 23,
+                height = 15,
+                frame_count = 4,
+                animation_speed = 0.5,
+                shift = util.by_pixel(3.5, -38),
+                scale = 0.5
+            }
+        }
+    }
+}
+
+iv_furnace.water_reflection =
+{
+    pictures =
+    {
+        filename = "__ksptooi-server-commons-preprocess__/modules/iv-furnaces/res/electric-furnace-reflection.png",
+        priority = "extra-high",
+        width = 24,
+        height = 24,
+        shift = util.by_pixel(5, 40),
+        variation_count = 1,
+        scale = 5
+    },
+    rotate = false,
+    orientation_to_variation = false
+}
+
+
+data:extend({iv_furnace})
+
+
+--[[
+data:extend({
     type = "furnace",
-    name = "kscp-furnaces-4",
+
     icon = "__base__/graphics/icons/electric-furnace.png",
     icon_size = 64, icon_mipmaps = 4,
     flags = {"placeable-neutral", "placeable-player", "player-creation"},
@@ -234,4 +433,4 @@ data:extend(  {
         rotate = false,
         orientation_to_variation = false
     }
-})
+})]]

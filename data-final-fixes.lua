@@ -29,6 +29,10 @@ require "modules.compact-reactor.receipe"
 require "modules.compact-reactor.technology"
 data.raw["recipe"]["kscp-compact-nuclear-reactor"].hide=false
 
+data.raw["wall"]["stone-wall"].max_health = 215
+
+
+
 
 
 
